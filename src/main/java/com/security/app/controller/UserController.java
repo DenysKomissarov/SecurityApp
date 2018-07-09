@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,8 +33,6 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-//    @Autowired
-//    private RoleRepository roleRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -44,10 +40,9 @@ public class UserController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Transactional
     public ResponseEntity<?> editUser(@CurrentUser UserPrincipal userPrincipal,
-                                      @Valid @RequestBody CreateUserDTO editUserDTO) {
+                                      @Valid @RequestBody CreateUserDTO editUserDTO) { // FIXME You need to avoid work inside controllers (With out reason)
 
-        List<String> authorities = userPrincipal.getAuthorities().stream().map(role ->
-                ((GrantedAuthority) role).getAuthority()
+        List<String> authorities = userPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority
         ).collect(Collectors.toList());
 
         User user = userRepository.findByUsernameOrEmail(editUserDTO.getEmail(), editUserDTO.getEmail())
@@ -76,11 +71,6 @@ public class UserController {
         user.setUsername(editUserDTO.getUsername());
         user.setPassword(passwordEncoder.encode(editUserDTO.getPassword()));
         user.setName(editUserDTO.getName());
-
-//        Set<String> roles = new HashSet<>();
-//        for (RoleName role : editUserDTO.getRoles()) {
-//            roles.add(roleRepository.findByName(role).get().toString());
-//        }
         user.setRoles(editUserDTO.getRoles());
 
         return user;

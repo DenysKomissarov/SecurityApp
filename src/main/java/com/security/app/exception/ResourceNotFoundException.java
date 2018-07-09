@@ -3,7 +3,7 @@ package com.security.app.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
+@ResponseStatus(HttpStatus.NOT_FOUND) // FIXME You need to hold all exceptions in Controller Advice
 public class ResourceNotFoundException extends RuntimeException {
     private String resourceName;
     private String fieldName;

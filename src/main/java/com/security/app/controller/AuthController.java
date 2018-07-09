@@ -43,7 +43,7 @@ public class AuthController {
     JwtTokenProvider tokenProvider;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<JwtAuthenticationResponse> authenticateUser(@Valid @RequestBody LoginDTO loginDTO) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -59,14 +59,14 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpDTO signUpDTO) {
+    public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpDTO signUpDTO) {
         if(userRepository.existsByUsername(signUpDTO.getUsername())) {
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponse(false, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if(userRepository.existsByEmail(signUpDTO.getEmail())) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -78,6 +78,6 @@ public class AuthController {
         user.setRoles(userRepository.findAll().size() > 0 ? new Role() : new Role(Collections.singleton(RoleName.ROLE_ADMIN)));
         userRepository.save(user);
 
-        return new ResponseEntity<ApiResponse>(new ApiResponse(true, "User registered successfully"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(true, "User registered successfully"), HttpStatus.CREATED);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtTokenProvider {
+public class JwtTokenProvider { // Fixme This is not a provider
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 

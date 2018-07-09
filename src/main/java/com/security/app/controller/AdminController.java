@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,17 +24,15 @@ public class AdminController {
     private UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
-//    @Autowired
-//    RoleRepository roleRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public ResponseEntity<?> deleteUser(@RequestParam String email) {
+    public ResponseEntity<ApiResponse> deleteUser(@RequestParam String email) {  //Fixme NEVER SET GENERIC INTO <?>
         if(!userRepository.existsByEmail(email)) {
-            return new ResponseEntity(new ApiResponse(false, "there is no user with that name!"),
+            return new ResponseEntity<>(new ApiResponse(false, "there is no user with that name!"),
                     HttpStatus.BAD_REQUEST);
         }
         userRepository.deleteUserByEmail(email);
@@ -46,23 +42,19 @@ public class AdminController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) {
+    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) { //Fixme NEVER SET GENERIC INTO <?>
         if(userRepository.existsByUsername(createUserDTO.getUsername())) {
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponse(false, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
         if(userRepository.existsByEmail(createUserDTO.getEmail())) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
         User user = new User(createUserDTO.getName(), createUserDTO.getUsername(),
                 createUserDTO.getEmail(), createUserDTO.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        Set<String> roles = new HashSet<>();
-//        for (RoleName role : createUserDTO.getRoles()) {
-//            roles.add(roleRepository.findByName(role).get().toString());
-//        }
         user.setRoles(createUserDTO.getRoles());
         userRepository.save(user);
 

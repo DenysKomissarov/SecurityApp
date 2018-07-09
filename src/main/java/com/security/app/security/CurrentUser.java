@@ -8,6 +8,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @AuthenticationPrincipal
-public @interface CurrentUser {
+public @interface CurrentUser { //TODO Please avoid such approach. Cause for this purpose we have Security context (You need avoid work with users on web layer)
 
 }

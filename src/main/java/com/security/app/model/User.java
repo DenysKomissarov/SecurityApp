@@ -41,7 +41,7 @@ public class User  {
 
 
 
-    private Role authorities;
+    private Role authorities;  // FIXME Create not as Object, You need to use here Set<String>
 
     public User() {
 
