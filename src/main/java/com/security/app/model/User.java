@@ -1,10 +1,13 @@
 package com.security.app.model;
 
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 
 @Entity
@@ -39,10 +42,8 @@ public class User  {
     @Size(max = 100)
     private String password;
 
-
-
-    private Role authorities;  // FIXME Create not as Object, You need to use here Set<String>
-
+    @Type(type = "serializable")
+    private Set<String> roles;
     public User() {
 
     }
@@ -94,11 +95,11 @@ public class User  {
         this.password = password;
     }
 
-    public Role getRoles() {
-        return authorities;
+    public Set<String> getRoles() {
+        return roles;
     }
 
-    public void setRoles(Role authorities) {
-        this.authorities = authorities;
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 }

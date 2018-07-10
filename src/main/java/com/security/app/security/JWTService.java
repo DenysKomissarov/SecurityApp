@@ -1,18 +1,23 @@
 package com.security.app.security;
 
+import com.security.app.model.User;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 @Component
-public class JwtTokenProvider { // Fixme This is not a provider
+public class JWTService {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(JWTService.class);
 
     @Value("${app.jwtSecret}")
     private String jwtSecret;
@@ -28,7 +33,7 @@ public class JwtTokenProvider { // Fixme This is not a provider
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
+                .setSubject(Long.toString(userPrincipal.getUser().getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

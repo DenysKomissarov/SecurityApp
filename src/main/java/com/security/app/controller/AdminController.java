@@ -1,16 +1,13 @@
 package com.security.app.controller;
 
 import com.security.app.dto.CreateUserDTO;
-import com.security.app.model.User;
-import com.security.app.repository.UserRepository;
 import com.security.app.responce.ApiResponse;
+import com.security.app.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,44 +18,24 @@ import javax.validation.Valid;
 public class AdminController {
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public ResponseEntity<ApiResponse> deleteUser(@RequestParam String email) {  //Fixme NEVER SET GENERIC INTO <?>
-        if(!userRepository.existsByEmail(email)) {
-            return new ResponseEntity<>(new ApiResponse(false, "there is no user with that name!"),
-                    HttpStatus.BAD_REQUEST);
-        }
-        userRepository.deleteUserByEmail(email);
-        return new ResponseEntity<>(new ApiResponse(true, "User removed successfully"), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> deleteUser(@RequestParam String email) {
+
+        return userService.deleteUser(email);
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
-    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) { //Fixme NEVER SET GENERIC INTO <?>
-        if(userRepository.existsByUsername(createUserDTO.getUsername())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
-        }
-        if(userRepository.existsByEmail(createUserDTO.getEmail())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
-                    HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) {
 
-        User user = new User(createUserDTO.getName(), createUserDTO.getUsername(),
-                createUserDTO.getEmail(), createUserDTO.getPassword());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(createUserDTO.getRoles());
-        userRepository.save(user);
-
-        return new ResponseEntity<>(new ApiResponse(true, "User registered successfully"), HttpStatus.CREATED);
+        return userService.createUser(createUserDTO);
 
     }
 

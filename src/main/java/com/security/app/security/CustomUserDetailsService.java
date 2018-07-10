@@ -1,8 +1,8 @@
 package com.security.app.security;
 
-import com.security.app.exception.ResourceNotFoundException;
 import com.security.app.model.User;
 import com.security.app.repository.UserRepository;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,15 +25,15 @@ public class CustomUserDetailsService implements UserDetailsService {
                         new UsernameNotFoundException("User not found with username or email : " + usernameOrEmail)
         );
 
-        return UserPrincipal.create(user);
+        return new UserPrincipal(user);
     }
 
     @Transactional
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-            () -> new ResourceNotFoundException("User", "id", id)
+            () -> new ServiceException("User not found with id " + id)
         );
 
-        return UserPrincipal.create(user);
+        return new UserPrincipal(user);
     }
 }

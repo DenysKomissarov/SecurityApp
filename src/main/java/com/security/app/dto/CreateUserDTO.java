@@ -1,12 +1,8 @@
 package com.security.app.dto;
 
-import com.security.app.model.Role;
-import com.security.app.model.RoleName;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.Set;
 
 public class CreateUserDTO{
@@ -27,8 +23,9 @@ public class CreateUserDTO{
     @Size(max = 100)
     private String password;
 
-    private Role roles;
+//    private Role roles;
 
+    private Set<String> roles;
 
     public String getUsername() {
         return username;
@@ -62,11 +59,19 @@ public class CreateUserDTO{
         this.password = password;
     }
 
-    public Role getRoles() {
+//    public Role getRoles() {
+//        return roles;
+//    }
+//
+//    public void setRoles(Role roles) {
+//        this.roles = roles;
+//    }
+
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Role roles) {
+    public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
 }
