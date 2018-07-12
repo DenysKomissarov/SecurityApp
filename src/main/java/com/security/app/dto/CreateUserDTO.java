@@ -23,8 +23,6 @@ public class CreateUserDTO{
     @Size(max = 100)
     private String password;
 
-//    private Role roles;
-
     private Set<String> roles;
 
     public String getUsername() {
@@ -58,14 +56,6 @@ public class CreateUserDTO{
     public void setPassword(String password) {
         this.password = password;
     }
-
-//    public Role getRoles() {
-//        return roles;
-//    }
-//
-//    public void setRoles(Role roles) {
-//        this.roles = roles;
-//    }
 
     public Set<String> getRoles() {
         return roles;
