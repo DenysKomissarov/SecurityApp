@@ -22,7 +22,6 @@ public class AuthController {
     @Autowired
     UserService userService;
 
-
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthenticationResponse> authenticateUser(@Valid @RequestBody LoginDTO loginDTO) throws UnsupportedEncodingException {
 

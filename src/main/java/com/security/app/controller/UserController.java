@@ -4,8 +4,6 @@ import com.security.app.dto.CreateUserDTO;
 import com.security.app.responce.ApiResponse;
 import com.security.app.security.UserPrincipal;
 import com.security.app.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,8 +20,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/edit")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")

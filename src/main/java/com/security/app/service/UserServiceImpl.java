@@ -10,8 +10,6 @@ import com.security.app.responce.ApiResponse;
 import com.security.app.responce.JwtAuthenticationResponse;
 import com.security.app.security.UserPrincipal;
 import com.security.app.security.service.JWTService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +26,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     AuthenticationManager authenticationManager;
