@@ -1,0 +1,18 @@
+1.MySQL
+ 	create DataBase "users_contacts"
+	username "root"
+	password "root1234"
+
+	In Terminal:
+ 	" mysql -u root -p root1234"
+	"CREATE DATABASE users_contacts"
+
+2.Jar
+	start jar
+
+	In Terminal:
+	"cd /path_to_jar/"
+	"java -jar jar_name.jar"
+
+
+
