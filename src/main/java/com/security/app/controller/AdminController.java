@@ -22,7 +22,6 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<ApiResponse> deleteUser(@RequestParam String email) {
-
         return userService.deleteUser(email);
     }
 

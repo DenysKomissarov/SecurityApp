@@ -22,10 +22,6 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-
-        setHeaders(response);
-        System.out.println(request.getRequestURI());
-
         return request.getRequestURI().contains(SECURED_URL)
                 && super.requiresAuthentication(request, response)
                 && !request.getMethod().equals(HttpMethod.OPTIONS.name());
@@ -48,12 +44,5 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         super.successfulAuthentication(request, response, chain, authResult);
         chain.doFilter(request, response);
-    }
-
-    public void setHeaders(HttpServletResponse response) {
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "*");
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "*");
     }
 }

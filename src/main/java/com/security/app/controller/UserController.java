@@ -22,7 +22,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/edit")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ApiResponse> editUser(@Valid @RequestBody CreateUserDTO editUserDTO,
                                                 Authentication authentication) {
 

@@ -6,7 +6,6 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -43,6 +42,7 @@ public class JWTService {
     }
 
 
+    @SuppressWarnings("unchecked")
     public UserPrincipal getUserDetailFromToken(String token){
         Jws<Claims> userDetailsParts = parseToken(token);
 
