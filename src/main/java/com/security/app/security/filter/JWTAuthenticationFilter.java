@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+
     public static final String SECURED_URL = "/user";
 
     public JWTAuthenticationFilter(String defaultFilterProcessesUrl) {

@@ -1,5 +1,7 @@
 package com.security.app.service;
 
+import com.security.app.controller.advice.PermisionException;
+import com.security.app.controller.advice.UserNotFoundException;
 import com.security.app.dto.CreateUserDTO;
 import com.security.app.dto.LoginDTO;
 import com.security.app.dto.SignUpDTO;
@@ -13,76 +15,79 @@ import com.security.app.security.service.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+//    private AuthenticationManager authenticationManager;
+
+    private UserRepository userRepository;
+
+    private PasswordEncoder passwordEncoder;
+
+    private JWTService jwtService;
 
     @Autowired
-    UserRepository userRepository;
+    public UserServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository,
+                           PasswordEncoder passwordEncoder, JWTService jwtService){
+//        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+    }
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    public ResponseEntity<ApiResponse> editUserByAdmin(CreateUserDTO editUserDTO){
 
-    @Autowired
-    JWTService jwtService;
+        User user = getUser(editUserDTO.getEmail(), editUserDTO.getEmail());
+        userRepository.save(updateUser(user, editUserDTO));
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "User update successfully"), HttpStatus.CREATED);
+    }
 
-    public ResponseEntity<ApiResponse> editUser(UserPrincipal userPrincipal,
-                                                CreateUserDTO editUserDTO){
-        List<String> authorities = userPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority
-        ).collect(Collectors.toList());
+    public ResponseEntity<ApiResponse> editByUser(CreateUserDTO editUserDTO, Authentication authentication){
 
-        User user = userRepository.findByUsernameOrEmail(editUserDTO.getEmail(), editUserDTO.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("there is no user with this data"));
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        if (authorities.contains("ROLE_ADMIN")){
-
-            userRepository.save(updateUser(user, editUserDTO));
-            return new ResponseEntity<>(new ApiResponse(true, "User update successfully"), HttpStatus.CREATED);
-        }
-
+        User user = getUser(editUserDTO.getEmail(), editUserDTO.getEmail());
 
         if (editUserDTO.getEmail().equals(userPrincipal.getUser().getEmail())){
 
             userRepository.save(updateUser(user, editUserDTO));
-            return new ResponseEntity<>(new ApiResponse(true, "User update successfully"), HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "User update successfully"), HttpStatus.CREATED);
         }
 
-        return new ResponseEntity<>(new ApiResponse(false, "you can only edit your data"), HttpStatus.BAD_REQUEST);
+        throw  new PermisionException("You don't have permission!", "you can only edit your data");
+//        return new ResponseEntity<>(new ApiResponse(HttpStatus.FORBIDDEN, "you can only edit your data"), HttpStatus.BAD_REQUEST);
     }
 
     @Override
     @Transactional
     public ResponseEntity<ApiResponse> deleteUser(String email) {
         if(!userRepository.existsByEmail(email)) {
-            return new ResponseEntity<>(new ApiResponse(false, "there is no user with that name!"),
-                    HttpStatus.BAD_REQUEST);
+            throw  new UserNotFoundException("User not found!", "there is no user with that email! " + email);
+//            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, "there is no user with that name!"),
+//                    HttpStatus.BAD_REQUEST);
         }
         userRepository.deleteUserByEmail(email);
-        return new ResponseEntity<>(new ApiResponse(true, "User removed successfully"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "User removed successfully"), HttpStatus.OK);
     }
 
     @Override
     @Transactional
     public ResponseEntity<ApiResponse> createUser(CreateUserDTO createUserDTO) {
         if(userRepository.existsByUsername(createUserDTO.getUsername())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
         if(userRepository.existsByEmail(createUserDTO.getEmail())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -92,13 +97,13 @@ public class UserServiceImpl implements UserService {
         user.setRoles(createUserDTO.getRoles());
         userRepository.save(user);
 
-        return new ResponseEntity<>(new ApiResponse(true, "User registered successfully"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED, "User created successfully"), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<JwtAuthenticationResponse> authenticateUser(LoginDTO loginDTO) throws UnsupportedEncodingException {
 
-        User user = userRepository.findByEmail(loginDTO.getUsernameOrEmail()).orElseThrow(() -> new IllegalArgumentException("there is no user with that name"));
+        User user = getUser(loginDTO.getUsernameOrEmail(), loginDTO.getUsernameOrEmail());
 
         if (user.getRoles().contains("ROLE_ADMIN") && passwordEncoder.matches( loginDTO.getPassword(), user.getPassword())){
             return ResponseEntity.ok(new JwtAuthenticationResponse(jwtService.generateToken(user)));
@@ -114,12 +119,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<ApiResponse> registerUser(SignUpDTO signUpDTO) {
         if(userRepository.existsByUsername(signUpDTO.getUsername())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if(userRepository.existsByEmail(signUpDTO.getEmail())) {
-            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -131,9 +136,15 @@ public class UserServiceImpl implements UserService {
         user.setRoles(userRepository.findAll().size() > 0 ? Collections.singleton(RoleName.ROLE_USER.name()) : Collections.singleton(RoleName.ROLE_ADMIN.name()));
         userRepository.save(user);
 
-        return new ResponseEntity<>(new ApiResponse(true, "User registered successfully"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED, "User registered successfully"), HttpStatus.CREATED);
     }
 
+    private User getUser(String username, String email){
+
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new UserNotFoundException("User not found!", "User not found with email " + email));
+        return user;
+    }
 
     private User updateUser(User user, CreateUserDTO editUserDTO){
 

@@ -19,8 +19,11 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private UserService userService;
     @Autowired
-    UserService userService;
+    public AuthController(UserService userService){
+        this.userService = userService;
+    }
 
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthenticationResponse> authenticateUser(@Valid @RequestBody LoginDTO loginDTO) throws UnsupportedEncodingException {

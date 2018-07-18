@@ -1,21 +1,23 @@
 package com.security.app.responce;
 
 
+import org.springframework.http.HttpStatus;
+
 public class ApiResponse {
-    private Boolean success;
+    private HttpStatus status;
     private String message;
 
-    public ApiResponse(Boolean success, String message) {
-        this.success = success;
+    public ApiResponse(HttpStatus status, String message) {
+        this.status = status;
         this.message = message;
     }
 
-    public Boolean getSuccess() {
-        return success;
+    public HttpStatus getStatus() {
+        return status;
     }
 
-    public void setSuccess(Boolean success) {
-        this.success = success;
+    public void setStatus(HttpStatus status) {
+        this.status = status;
     }
 
     public String getMessage() {

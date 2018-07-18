@@ -7,11 +7,15 @@ import com.security.app.responce.ApiResponse;
 import com.security.app.responce.JwtAuthenticationResponse;
 import com.security.app.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 import java.io.UnsupportedEncodingException;
 
 public interface UserService {
-    ResponseEntity<ApiResponse> editUser(UserPrincipal userPrincipal, CreateUserDTO editUserDTO);
+
+    ResponseEntity<ApiResponse> editUserByAdmin(CreateUserDTO editUserDTO);
+
+    ResponseEntity<ApiResponse> editByUser(CreateUserDTO editUserDTO, Authentication authentication);
 
     ResponseEntity<ApiResponse> deleteUser(String email);
 

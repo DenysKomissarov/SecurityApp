@@ -20,15 +20,12 @@ public class JWTService {
     @Value("${app.tokenValidHours}")
     private int tokenValidHours;
 
-    private static final Logger logger = LoggerFactory.getLogger(JWTService.class);
-
     public String generateToken(User account) throws UnsupportedEncodingException {
 
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.add(Calendar.HOUR, tokenValidHours);
 
         Map<String, Object> cailms = new HashMap<>();
-        List<String> userRoles;
         cailms.put("id", Long.toString(account.getId()));
         cailms.put("email", account.getEmail());
         cailms.put("userName", account.getUsername());
@@ -40,7 +37,6 @@ public class JWTService {
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
-
 
     @SuppressWarnings("unchecked")
     public UserPrincipal getUserDetailFromToken(String token){
@@ -64,24 +60,5 @@ public class JWTService {
 
         return claimsJwt;
     }
-
-    public boolean validateToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken);
-            return true;
-        } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
-        }
-        return false;
-    }
-
 
 }

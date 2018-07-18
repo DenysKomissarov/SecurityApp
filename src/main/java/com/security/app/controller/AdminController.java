@@ -15,10 +15,13 @@ import javax.validation.Valid;
 @RequestMapping("/api/user")
 public class AdminController {
 
+    private UserService userService;
     @Autowired
-    UserService userService;
+    public AdminController(UserService userService){
+        this.userService = userService;
+    }
 
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<ApiResponse> deleteUser(@RequestParam String email) {
