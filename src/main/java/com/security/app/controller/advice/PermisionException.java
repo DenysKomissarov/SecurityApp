@@ -1,19 +1,15 @@
 package com.security.app.controller.advice;
 
-import com.security.app.responce.ApiResponse;
-
-import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 public class PermisionException extends GlobalException {
 
-    private ApiResponse apiResponse;
-
     public PermisionException(String message, String error) {
-        super(message, 403, error);
+        super(message, HttpStatus.FORBIDDEN, error);
     }
 
-    @Override
-    public ApiResponse getApiResponse() {
-        return apiResponse;
+    public PermisionException(String message) {
+        super(message, HttpStatus.FORBIDDEN);
     }
+
 }

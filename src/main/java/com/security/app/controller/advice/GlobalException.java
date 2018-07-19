@@ -1,44 +1,33 @@
 package com.security.app.controller.advice;
 
 
-import com.security.app.responce.ApiResponse;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 public class GlobalException extends RuntimeException {
-    private int responseCode;
+    private HttpStatus responseCode;
     private String error;
-    private ApiResponse apiResponse;
 
-    public GlobalException(int responseCode) {
+    public GlobalException(HttpStatus responseCode) {
         super();
         this.responseCode = responseCode;
     }
 
-    public GlobalException(String message, Throwable throwable) {
-        super(message, throwable);
-        responseCode = 500;
-    }
-
-    public GlobalException(String message, int responseCode) {
+    public GlobalException(String message, HttpStatus responseCode) {
         super(message);
         this.responseCode = responseCode;
     }
 
-    public GlobalException(String message, int responseCode, String error) {
+    public GlobalException(String message, HttpStatus responseCode, String error) {
         super(message);
         this.responseCode = responseCode;
         this.error = error;
     }
 
-    public GlobalException(String message, int responseCode, String error, Throwable throwable) {
-        super(message, throwable);
-        this.responseCode = responseCode;
-        this.error = error;
+    public HttpStatus getResponseCode() {
+        return responseCode;
     }
 
-    public ApiResponse getApiResponse() {
-        return apiResponse;
+    public String getError() {
+        return error;
     }
 }
