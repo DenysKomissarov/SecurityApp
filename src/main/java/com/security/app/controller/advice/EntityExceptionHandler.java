@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @ControllerAdvice
 @ResponseBody
@@ -39,7 +41,8 @@ public class EntityExceptionHandler{
     }*/
 
     @ExceptionHandler(GlobalException.class)
-    public ApiResponse globalHandler(GlobalException exception){
+    public ApiResponse globalHandler(GlobalException exception, HttpServletResponse resp) throws IOException {
+        resp.sendError(exception.getResponseCode().value());
         return new ApiResponse(exception.getResponseCode(), exception.getMessage());
     }
 
