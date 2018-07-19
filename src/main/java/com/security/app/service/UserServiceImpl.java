@@ -1,8 +1,7 @@
 package com.security.app.service;
 
-import com.security.app.controller.advice.BadRequestException;
-import com.security.app.controller.advice.PermisionException;
-import com.security.app.controller.advice.UserNotFoundException;
+import com.security.app.exception.BadRequestException;
+import com.security.app.exception.UserNotFoundException;
 import com.security.app.dto.CreateUserDTO;
 import com.security.app.dto.LoginDTO;
 import com.security.app.dto.SignUpDTO;
@@ -11,14 +10,10 @@ import com.security.app.model.User;
 import com.security.app.repository.UserRepository;
 import com.security.app.responce.ApiResponse;
 import com.security.app.responce.JwtAuthenticationResponse;
-import com.security.app.security.UserPrincipal;
 import com.security.app.security.service.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.security.app.controller.advice;
+package com.security.app.exception;
 
 
 import org.springframework.http.HttpStatus;
