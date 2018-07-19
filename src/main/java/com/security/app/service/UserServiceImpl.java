@@ -42,24 +42,11 @@ public class UserServiceImpl implements UserService {
         this.jwtService = jwtService;
     }
 
-    public ResponseEntity<ApiResponse> editUserByAdmin(CreateUserDTO editUserDTO){
+    public ResponseEntity<ApiResponse> editUser(CreateUserDTO editUserDTO){
 
         User user = getUser(editUserDTO.getEmail());
         userRepository.save(updateUser(user, editUserDTO));
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "User update successfully"), HttpStatus.CREATED);
-    }
-
-    public ResponseEntity<ApiResponse> editByUser(CreateUserDTO editUserDTO, Authentication authentication){
-
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        User user = getUser(editUserDTO.getEmail());
-        if (editUserDTO.getEmail().equals(userPrincipal.getUser().getEmail())){
-
-            userRepository.save(updateUser(user, editUserDTO));
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "User update successfully"), HttpStatus.CREATED);
-        }
-
-        throw  new PermisionException("You don't have permission!", "you can only edit your data");
     }
 
     @Override

@@ -13,9 +13,7 @@ import java.io.UnsupportedEncodingException;
 
 public interface UserService {
 
-    ResponseEntity<ApiResponse> editUserByAdmin(CreateUserDTO editUserDTO);
-
-    ResponseEntity<ApiResponse> editByUser(CreateUserDTO editUserDTO, Authentication authentication);
+    ResponseEntity<ApiResponse> editUser(CreateUserDTO editUserDTO);
 
     ResponseEntity<ApiResponse> deleteUser(String email);
 
