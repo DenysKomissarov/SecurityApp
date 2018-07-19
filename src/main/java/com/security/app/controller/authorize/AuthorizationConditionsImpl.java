@@ -1,4 +1,4 @@
-package com.security.app.security.authorize;
+package com.security.app.controller.authorize;
 
 import com.security.app.dto.CreateUserDTO;
 import com.security.app.security.UserPrincipal;
