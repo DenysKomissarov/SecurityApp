@@ -41,7 +41,8 @@ public class EntityExceptionHandler{
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<ApiResponse> globalHandler(GlobalException exception){
-        return ResponseEntity.ok(new ApiResponse(exception.getResponseCode(), exception.getMessage()));
+        return new ResponseEntity<>(new ApiResponse(exception.getResponseCode(), exception.getMessage()),
+                exception.getResponseCode());
     }
 
 
