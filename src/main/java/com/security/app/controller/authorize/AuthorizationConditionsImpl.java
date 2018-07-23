@@ -14,9 +14,6 @@ public class AuthorizationConditionsImpl implements AuthorizationConditions {
 
        return editUserDTO.getEmail().equals(userPrincipal.getUser().getEmail()) ? true : false;
 
-//        throw  new PermisionException("You don't have permission!", "you can only edit your data");
-
-
     }
 
 

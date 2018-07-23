@@ -15,32 +15,9 @@ public class EntityExceptionHandler{
 
     private static final Logger logger = LoggerFactory.getLogger(EntityExceptionHandler.class);
 
-   /* @ExceptionHandler(UserNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ResponseBody
-    public ApiResponse userNotFound(UserNotFoundException ex){
-        logger.info(ex.getMessage());
-        return new ApiResponse(ex.getResponseCode(), ex.getMessage());
-    }
-
-    @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ApiResponse badRequest(BadRequestException ex){
-        logger.info(ex.getMessage());
-        return new ApiResponse(ex.getResponseCode(), ex.getMessage());
-    }
-
-    @ExceptionHandler(PermisionException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ResponseBody
-    protected ApiResponse permision(PermisionException ex) {
-        logger.info(ex.getMessage());
-        return new ApiResponse(ex.getResponseCode(), ex.getMessage());
-    }*/
-
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<ApiResponse> globalHandler(GlobalException exception){
+        logger.info(exception.getResponseCode() + ", " + exception.getMessage());
         return new ResponseEntity<>(new ApiResponse(exception.getResponseCode(), exception.getMessage()),
                 exception.getResponseCode());
     }
