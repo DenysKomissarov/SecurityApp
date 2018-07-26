@@ -1,0 +1,461 @@
+{
+	"info": {
+		"_postman_id": "198ac357-3659-4f99-9b22-3b84d3ff2a18",
+		"name": "SecurityUsers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SignUpUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\":\"vasya\",\n  \"username\":\"vas\",\n  \"email\":\"vasya@gmail.com\",\n  \"password\":\"vasya123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Me",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:9000/api/user/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"user",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SignIn",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"usernameOrEmail\":\"vasya@gmail.com\",\n  \"password\":\"vasya123\"\n  \n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateUserWithAdminToken",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\":\"vasya\",\n  \"username\":\"vasyok\",\n  \"email\":\"vasya@gmail.com\",\n  \"password\":\"vasya123\",\n     \"roles\":[\"ROLE_USER\",\"ROLE_ADMIN\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/user/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"user",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteUserWithAdminToken",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:9000/api/user/delete?email=vasya@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"user",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "vasya@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserEdit",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\" : \"vasya2\",\n  \"username\" : \"vas\",\n  \"email\" : \"vasya@gmail.com\",\n  \"password\" : \"vasya123\",\n    \"roles\":[\"ROLE_USER\",\"ROLE_ADMIN\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/user/edit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"user",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "First SignUp For Admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\" : \"admin\",\n  \"username\" : \"adm\",\n  \"email\" : \"admin@gmail.com\",\n  \"password\" : \"admin123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SignIn Admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"usernameOrEmail\":\"admin@gmail.com\",\n  \"password\":\"admin123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/auth/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\" : \"admin2\",\n  \"username\" : \"adm2\",\n  \"email\" : \"admin@gmail.com\",\n  \"password\" : \"admin123\",\n    \"roles\":[\"ROLE_USER\",\"ROLE_ADMIN\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/user/edit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"user",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit User With Admin Token",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\" : \"vasya25\",\n  \"username\" : \"vas\",\n  \"email\" : \"vasya25@gmail.com\",\n  \"password\" : \"vasya123\",\n    \"roles\":[\"ROLE_USER\",\"ROLE_ADMIN\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/user/edit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"user",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload File",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "uploadfile",
+							"description": "",
+							"type": "file"
+						},
+						{
+							"key": "name",
+							"value": "vasya",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "vasya@gmail.com",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "vasya123",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/file/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"file",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Download File",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:9000/api/file/download?filename=lake.JPG",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"file",
+						"download"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "lake.JPG"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show File",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:9000/api/file/show?filename=lake.JPG",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"file",
+						"show"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "lake.JPG"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Files",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"usernameOrEmail\":\"vasya@gmail.com\",\n  \"password\":\"vasya123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/file/get/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"file",
+						"get",
+						"all"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
