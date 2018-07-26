@@ -1,0 +1,22 @@
+spring:
+  flyway:
+    locations: classpath:db
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  datasource:
+    url: ${PSQL_HOST:jdbc:postgresql://localhost:5432/java_team}
+    username: root
+    password: root
+    hikari:
+      maximum-pool-size: 8
+server:
+  port: 9000
+jwt:
+  secret: EAtOj0Z3QeHqd8B30Y1sBsA2TN6DPFioBMZV5iw63PeECjNX86UdmmPiGUWEWA2135wwghdrt
+  tokenValidHours: 2
