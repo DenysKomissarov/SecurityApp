@@ -1,6 +1,7 @@
 package com.security.web.controller;
 
 import com.security.dto.LoginDTO;
+import com.security.dto.MultipartDto;
 import com.security.service.FileService;
 import com.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +28,12 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadMultipartFile(
-                                      @RequestParam("uploadfile") MultipartFile file,
-                                      @RequestParam("name") String name,
-                                      @RequestParam("email") String email,
-                                      @RequestParam("password") String password) {
+    @PostMapping(value = "/upload")
+    public ResponseEntity<String> uploadMultipartFile(MultipartDto multipartDto ) {
 
+        fileService.store(multipartDto);
 
-        fileService.store(file, name, email, password);
-
-        return new ResponseEntity<>("File uploaded successfully! " + file.getOriginalFilename(), HttpStatus.OK);
+        return new ResponseEntity<>("File uploaded successfully! " + multipartDto.getUploadfile().getOriginalFilename(), HttpStatus.OK);
     }
 
 

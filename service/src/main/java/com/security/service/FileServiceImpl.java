@@ -5,6 +5,7 @@ import com.security.data.audit.dao.UserRepository;
 import com.security.data.audit.model.User;
 import com.security.data.audit.model.UserFile;
 import com.security.dto.LoginDTO;
+import com.security.dto.MultipartDto;
 import com.security.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,15 +33,15 @@ public class FileServiceImpl implements FileService {
     private FileRepository fileRepository;
 
     @Override
-    public void store(MultipartFile file, String name, String email, String password){
+    public void store(MultipartDto multipartDto){
         try {
 
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+            Files.copy(multipartDto.getUploadfile().getInputStream(), this.rootLocation.resolve(multipartDto.getUploadfile().getOriginalFilename()));
 
-            User user = userRepository.findByEmail(email).orElseThrow(() ->
-                    new UserNotFoundException("User not found!", "User not found with email " + email));
+            User user = userRepository.findByEmail(multipartDto.getEmail()).orElseThrow(() ->
+                    new UserNotFoundException("User not found!", "User not found with email " + multipartDto.getEmail()));
             UserFile userFile = new UserFile();
-            userFile.setFileName(rootLocation.resolve(file.getOriginalFilename()).toString());
+            userFile.setFileName(rootLocation.resolve(multipartDto.getUploadfile().getOriginalFilename()).toString());
             userFile.setOwner(user);
             fileRepository.save(userFile);
 
